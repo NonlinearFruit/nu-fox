@@ -4,4 +4,13 @@ on: push
 
 jobs:
   nushell-tests:
-    uses: NonlinearFruit/nuUnit/.github/workflows/nushell-tests.yml@master
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.0.0
+      - uses: hustcer/setup-nu@main
+        with:
+          version: "*"
+      - run: |
+          nu -c 'http get https://raw.githubusercontent.com/NonlinearFruit/nu-gron/master/gron.nu | save -f gron.nu'
+          nu -c 'http get https://raw.githubusercontent.com/NonlinearFruit/nuUnit/master/nuunit.nu | save -f nuunit.nu'
+          nu nuunit.nu
