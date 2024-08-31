@@ -5,8 +5,12 @@ export def generate-config [] {
   $config
   | gron $in
   | where ($it.value | describe) not-in [record list<any>]
-  | each {
-   $"user_pref\(\"($in.key)\", ($in.value | to nuon));"
-  }
+  | each {[
+    $"user_pref\(\"nu-fox.debug\", \"Error in preference: '($in.key)'\");"
+    $"user_pref\(\"($in.key)\", ($in.value | to nuon));"
+  ]}
+  | flatten
+  | append $"user_pref\(\"nu-fox.debug\", \"Successfully loaded!\");"
   | str join (char newline)
 }
+
